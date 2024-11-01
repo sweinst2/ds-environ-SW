@@ -177,6 +177,7 @@ Don't change the name from beachie_rast.
 
 ```{r reproject-raster}
 
+beachiecreek_rast <- project(beachiecreek_rast, crs(holidayfarm_rast))
 
 # This should return TRUE
 crs(beachiecreek_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
@@ -185,6 +186,7 @@ crs(beachiecreek_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
 b. Now convert the Terwilliger crs to the holiday crs. If the resolution is different, change it to match Holiday's resolution.
 
 ```{r}
+terwilliger_rast <- project(terwilliger_rast, crs(holidayfarm_rast), res = res(holidayfarm_rast))
 
 # This should return TRUE TRUE
 crs(terwilliger_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
@@ -195,6 +197,7 @@ c. Now you can plot all of the fires on the same map!
 HINT: Remember to re-make the dataframes.
 
 ```{r plot-projected-raster1}
+
 
 ```
 
