@@ -132,11 +132,19 @@ min(values(beachiecreek_rast))
 max(values(beachiecreek_rast))
 
 #terwilliger minmax
-minmax(DSM_HARV)
+minmax(terwilliger_rast)
 
-min(values(DSM_HARV))
+min(values(terwilliger_rast))
 
-max(values(DSM_HARV))
+max(values(terwilliger_rast))
+
+#holiday farm minmax
+
+minmax(holidayfarm_rast)
+
+min(values(holidayfarm_rast))
+
+max(values(holidayfarm_rast))
 
 
 
@@ -147,14 +155,15 @@ max(values(DSM_HARV))
 Given we expect there to be 4 values for each bin of severity (high, moderate, low, very low/unburned), let's try to work out why there are values other than 1-4. After checking the metadata .txt and inspecting the metadata in the raster itself, I could not find an explicit mention of the meaning on the non 1-4 data (maybe you can?). Not great practices USGS! But it is likely missing data. Let's convert the Holiday data greater than 4 to NA, just like we would a regular matrix of data.
 
 ```{r}
-holiday_rast[holiday_rast > 4] <- NA
-summary(values(holiday_rast))
+holidayfarm_rast[holidayfarm_rast > 4] <- NA
+summary(values(holidayfarm_rast))
 ```
 That's better :) 
 
 d. Do the same conversion for Beachie.
 ```{r}
-
+beachiecreek_rast[beachiecreek_rast > 4] <- NA
+summary(values(beachiecreek_rast))
 ```
 
 # Lab part 3: Reprojection
@@ -170,7 +179,7 @@ Don't change the name from beachie_rast.
 
 
 # This should return TRUE
-crs(beachie_rast, proj = TRUE) == crs(holiday_rast, proj = TRUE)
+crs(beachiecreek_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
 ```
 
 b. Now convert the Terwilliger crs to the holiday crs. If the resolution is different, change it to match Holiday's resolution.
@@ -178,8 +187,8 @@ b. Now convert the Terwilliger crs to the holiday crs. If the resolution is diff
 ```{r}
 
 # This should return TRUE TRUE
-crs(terwilliger_rast, proj = TRUE) == crs(holiday_rast, proj = TRUE)
-res(terwilliger_rast)[2] == res(holiday_rast)[2]
+crs(terwilliger_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
+res(terwilliger_rast)[2] == res(holidayfarm_rast)[2]
 ```
 
 c. Now you can plot all of the fires on the same map!
