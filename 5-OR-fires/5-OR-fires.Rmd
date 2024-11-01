@@ -1,6 +1,6 @@
 ---
-title: Lab 5: Oregon Fires
-output: github_document
+title: Lab 5 Oregon Fires
+output: pdf_document
 author: Lauren Ponisio
 ---
 
@@ -113,7 +113,9 @@ crs(terwilliger_rast, proj = TRUE)
 b. What about the resolution of each raster?
 
 ```{r, resolution}
-
+res(holidayfarm_rast)
+res(terwilliger_rast)
+res(beachiecreek_rast)
 ```
 
 - ANSWER resolution: Holiday:... Beachie:... Terwilliger:...
@@ -122,6 +124,21 @@ b. What about the resolution of each raster?
 c. Calculate the min and max values of each raster. Are they all the same?
 
 ```{r, minmax}
+#beachie creek minmax
+minmax(beachiecreek_rast)
+
+min(values(beachiecreek_rast))
+
+max(values(beachiecreek_rast))
+
+#terwilliger minmax
+minmax(DSM_HARV)
+
+min(values(DSM_HARV))
+
+max(values(DSM_HARV))
+
+
 
 ```
 - ANSWER minmax: Holiday:... Beachie:... Terwilliger:...
