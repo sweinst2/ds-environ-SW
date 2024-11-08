@@ -94,7 +94,7 @@ ggplot() +
 ```
 
 d. Compare these visualizations what is something you notice?
--ANSWER: 
+-ANSWER: The projections are weird for them all. I don really know what i am meant to compare because they all look different 
 
 # Lab part 2: Exploring the attributes of our spatial data.
 
@@ -106,8 +106,8 @@ crs(beachiecreek_rast, proj = TRUE)
 crs(terwilliger_rast, proj = TRUE)
 ```
 
-- ANSWER crs: Holiday:... Beachie:... Terwilliger:...
-- ANSWER units: Holiday:... Beachie:... Terwilliger:...
+- ANSWER crs: Holiday:? Beachie:? Terwilliger:?
+- ANSWER units: Holiday: m Beachie:m Terwilliger:m
 - ANSWER the same? : The same?
 
 b. What about the resolution of each raster?
@@ -118,8 +118,8 @@ res(terwilliger_rast)
 res(beachiecreek_rast)
 ```
 
-- ANSWER resolution: Holiday:... Beachie:... Terwilliger:...
-- ANSWER the same? : The same?
+- ANSWER resolution: Holiday:20 20 Beachie:20 20 Terwilliger:30 30 
+- ANSWER the same? : The same? Yea i guess??
 
 c. Calculate the min and max values of each raster. Are they all the same?
 
@@ -149,8 +149,8 @@ max(values(holidayfarm_rast))
 
 
 ```
-- ANSWER minmax: Holiday:... Beachie:... Terwilliger:...
-- ANSWER the same? : The same?
+- ANSWER minmax: Holiday: 1, 127 Beachie:1, 127 Terwilliger:1, 4
+- ANSWER the same? : only for 2 of them 
 
 Given we expect there to be 4 values for each bin of severity (high, moderate, low, very low/unburned), let's try to work out why there are values other than 1-4. After checking the metadata .txt and inspecting the metadata in the raster itself, I could not find an explicit mention of the meaning on the non 1-4 data (maybe you can?). Not great practices USGS! But it is likely missing data. Let's convert the Holiday data greater than 4 to NA, just like we would a regular matrix of data.
 
@@ -247,7 +247,7 @@ oreco_vect <- st_read("C:/Users/sarah/OneDrive/Desktop/labs/5-lab-OR-fires/5-OR-
 b. Check the projection and re-project if needed. We did not cover this in the lecture demo, but for vector data, use st_transform()
 
 ```{r or-crs}
-#I do not understan how to do this like at all
+#I do not understand how to do this like at all
 #st_transform()
 
 ```
@@ -278,7 +278,7 @@ ggplot(all_fires_df, aes(x = as.factor(Layer_1), y = (..count..)/ sum(..count..)
 
 ```
 b. What do you notice about the frequency of different severity classes when you compare these barplots. How does this relate to the Haldofsky reading?
-ANSWER: 
+ANSWER: My bar plot looks bad likt i did nomething incorrect so I dont really know hot to anser this
 
 Also, if the legend label bothers you (as it does for me)
 Check out this tutorial:
