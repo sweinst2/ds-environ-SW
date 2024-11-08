@@ -197,8 +197,16 @@ c. Now you can plot all of the fires on the same map!
 HINT: Remember to re-make the dataframes.
 
 ```{r plot-projected-raster1}
+beachiecreek_df <- as.data.frame(beachiecreek_rast, xy = TRUE)
+holidayfarm_df <- as.data.frame(holidayfarm_rast, xy = TRUE)
+terwilliger_df <- as.data.frame( terwilliger_rast, xy = TRUE)
 
-
+ggplot() +
+  geom_raster(data = beachiecreek_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = holidayfarm_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = terwilliger_df, aes(x = x, y = y, fill = SoilBurnSe)) +
+  scale_fill_brewer( palette = "Spectral", direction = -1)
+  
 ```
 
 Well that's annoying. It appears as though in 2018 the makers of these data decided to give 1,2,3,4 categorical names which are being interpreted as two different scales. If we look at the terwilliger_rast values we can see that in min max. 
@@ -216,6 +224,7 @@ Somethings you will need to be careful of:
 
 ```{r}
 
+
 ```
 
 e. Try plotting again. 
@@ -232,11 +241,14 @@ I found a nice ecoregion map on the OR spatial data website. https://spatialdata
 a. Load the data into R, it is in the OR-ecoregions folder.
 
 ```{r oreco}
+oreco_vect <- st_read("C:/Users/sarah/OneDrive/Desktop/labs/5-lab-OR-fires/5-OR-fires/OR-ecoregions/Ecoregions_OregonConservationStrategy.shp")
 
 ```
 b. Check the projection and re-project if needed. We did not cover this in the lecture demo, but for vector data, use st_transform()
 
 ```{r or-crs}
+#I do not understan how to do this like at all
+#st_transform()
 
 ```
 
@@ -256,8 +268,13 @@ a. Create a barplot with the count of each fire severity category.
 HINT: Rather annoyingly, you will need to convert the layer values to factors again to get fill to recognize them. EX: fill=as.factor(Layer_1)
 
 ```{r plot-hist}
+names(terwilliger_df)[names(terwilliger_df) == "SoilBurnSe"] <- "Layer_1"
+all_fires_df <- rbind(beachiecreek_df, holidayfarm_df, terwilliger_df)
 
-
+ggplot(all_fires_df, aes(x = as.factor(Layer_1), y = (..count..)/ sum(..count..), fill = as.factor(Layer_1))) + 
+  geom_bar(position = "dodge") +
+  scale_fill_brewer( palette = "Spectral", direction = -1) +
+  labs( x = "Severity", y = "Propotrtion of Fire Severity Categories")
 
 ```
 b. What do you notice about the frequency of different severity classes when you compare these barplots. How does this relate to the Haldofsky reading?
