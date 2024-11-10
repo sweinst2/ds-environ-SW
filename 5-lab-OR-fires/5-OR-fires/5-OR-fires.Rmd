@@ -226,7 +226,7 @@ Somethings you will need to be careful of:
 
 ```{r}
 
- 
+   
 ```
 
 e. Try plotting again. 
