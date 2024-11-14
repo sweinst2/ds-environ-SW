@@ -7,7 +7,6 @@ author:
 
 <!-- Lesson Overview -->
 
-#adding comment up here to see if i diex anytgin 
 # Conservation/ecology Topics 
 
 > - Species distributions 
@@ -28,7 +27,7 @@ library(sf)
 
 a. Import the OBA data.
 ```{r}
-OBA_data <- read.csv("C:/Users/sarah/OneDrive/Desktop/ds-environ-SW/6_lab_OBA_spatial/6_OBA_spatial/OBA_2018-2023.csv")
+OBA_data<- read.csv("C:/Users/sarah/OneDrive/Desktop/ds-environ-SW/6_lab_OBA_spatial/6_OBA_spatial/OBA_2018-2023.csv")
 
 OBA_data
 
@@ -39,6 +38,7 @@ b. Find the columns related to genus and species and paste them together (with a
 #I think that i did this correct. i hope lmao 
 GenusSpecies <- paste("Genus","Species")
  
+GenusSpecies
 ```
 
 c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alphabetical order.  How many species are there? 
@@ -46,7 +46,7 @@ c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alp
 ```{r}
 #i kinda totally forgot how this function works so that is very slay 
 
-sort(unique("GenusSpecies"))
+sort(unique(OBA_data$GenusSpecies))
 
 
 
