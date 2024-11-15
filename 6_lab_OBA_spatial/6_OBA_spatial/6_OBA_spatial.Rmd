@@ -228,3 +228,18 @@ ggplot(data_sum, aes(x = Buffer, y = flower_count, fill = Buffer)) +
   ) + 
   theme_minimal()
 ```
+
+
+```{r}
+ggplot() +
+  geom_sf( data = buffer_1000, fill = "transparent", color = "green", linetype = "dashed") +
+  geom_sf( data = flowers_1000, aes(color = "flowers"), size = 3) +
+  geom_sf(data = buffer_750, fill = "transparent", color = "blue", linetype = "dashed") +
+  geom_sf(data = buffer_500, fill = "transparent", color = "red", linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Flowers in Buffers Around Bees",
+    color = "Flowers"
+  ) + 
+  theme( legend.position = "none")
+```
