@@ -113,15 +113,15 @@ confused_data
 
 #this is not working for some reason
 
-#confused_spatial <- st_as_sf(confused_data, coords = c("Long", "Lat"), crs = 4326)
+confused_sf <- st_as_sf(confused_data, coords = c("Long", "Lat"), crs = 4326)
 
-
+print(confused_sf)
 ```
 
 b. Plot your exciting bee data!
 
 ```{r plot-data-points}
-ggplot(data = confused_spatial) +
+ggplot(data = confused_sf) +
   geom_sf() +
   theme_minimal() +
   labs(title = "Locations of Halictus confusus",
@@ -137,7 +137,7 @@ Luckily we can download basemaps into R using the map_data function in ggplot (a
 or <- map_data("county", "oregon") %>% 
   select(lon = long, lat, group, id = subregion)
 
-or_sp <- st_as_sf(or, coords = c("lon", "lat"), crs = 4326)
+
 
 ```
 
@@ -147,7 +147,7 @@ c. Add your species's points to your choice or an Oregon basemap.
 library(ggspatial)
 library(ggspatial)
 
-ggplot(data = confused_spatial) +
+ggplot(data = confused_sf) +
    geom_polygon(data = or, aes(x = lon, y = lat, group = group), 
                fill = "lightgrey", color = "white")+  
   geom_sf(color = "red", size = 2) +
@@ -170,6 +170,24 @@ additional attributes when you converted the dataframe to a spatial object.
 
 ```{r plot-creative}
 
+ggplot() +
+  geom_polygon(data = or, aes(x = lon, y = lat, group = group), fill = "lightgrey", color = "black") +
+  geom_sf(data = species_sf, aes(color = Month), size = 3) +
+  theme_minimal() +
+  labs(
+    title = "Halictus confusus Distribution Across Months",
+    x = "Longitude",
+    y = "Latitude",
+    color = "Month Collected"
+  ) +
+  annotation_scale(location = "tl", width_hint = 0.2) +
+  annotation_north_arrow(location = "tr", width = unit(.5, "in")) +
+  theme(
+    legend.position = "right", # Position
+    legend.title = element_text(size = 11), # Title 
+    legend.text = element_text(size = 9) # Text 
+  )
+st_write(confused_sf, "bee_species_layer.shp", append = TRUE)
 
 ```
 
@@ -182,6 +200,31 @@ b. Create a plot that illustrates this summary data (box plot, barplot, scatter 
 c. Create a map of your cropped spatial data.
 
 ```{r buffers}
+buffer_500 <- st_buffer(confused_sf, dist = 500000)
+buffer_750 <- st_buffer(confused_sf, dist = 750000)
+buffer_1000 <- st_buffer(confused_sf, dist = 1000000)
 
+flowers_500 <- st_intersection(confused_sf, buffer_500)
+flowers_750 <- st_intersection(confused_sf, buffer_750)
+flowers_1000 <- st_intersection(cofused_sf, buffer_1000)
 
+summary_500 <- nrow(flowers_500)
+summary_750 <- nrow(flowers_750)
+summary_1000 <- nrow(flowers_1000)
+
+data_sum <- data.frame(
+  Buffer = c("500 km", "750 km", "1000 km"),
+  flower_count = c(summary_500, summary_750, summary_1000)
+)
+
+data_sum
+
+ggplot(data_sum, aes(x = Buffer, y = flower_count, fill = Buffer)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Flower count with Buffers",
+    x = "Buffer Radius",
+    y = "Flower Count"
+  ) + 
+  theme_minimal()
 ```
