@@ -29,16 +29,15 @@ a. Import the OBA data.
 ```{r}
 OBA_data<- read.csv("C:/Users/sarah/OneDrive/Desktop/ds-environ-SW/6_lab_OBA_spatial/6_OBA_spatial/OBA_2018-2023.csv")
 
-OBA_data
+head(OBA_data)
 
 ```
 
 b. Find the columns related to genus and species and paste them together (with a space between) using the function paste(). Name the new column GenusSpecies.
 ```{r}
 #I think that i did this correct. i hope lmao 
-GenusSpecies <- paste("Genus","Species")
- 
-GenusSpecies
+OBA_df <- as.data.frame(OBA_data)
+head(OBA_df)
 ```
 
 c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alphabetical order.  How many species are there? 
@@ -46,7 +45,14 @@ c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alp
 ```{r}
 #i kinda totally forgot how this function works so that is very slay 
 
-sort(unique(OBA_data$GenusSpecies))
+unique_species <- sort(unique(OBA_df$GenusSpecies))
+
+
+print(unique_species)
+
+
+num_species <- length(unique_species)
+cat("Number of unique species:", num_species)
 
 
 
@@ -59,6 +65,13 @@ d. So many bees, so little time. Count up the occurrences of each bee species, a
 You can use the tidyverse or any other functions in R that you like. How many "species" are there? 
 
 ```{r}
+bee_counts_atleast_2 <- OBA_df %>%
+  group_by(Species) %>%
+  tally() %>%
+  filter(n >= 2)
+
+head(bee_counts_atleast_2)
+#346 species
 
 ```
 
