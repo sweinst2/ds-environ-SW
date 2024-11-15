@@ -124,7 +124,7 @@ b. Plot your exciting bee data!
 ggplot(data = confused_spatial) +
   geom_sf() +
   theme_minimal() +
-  labs(title = "Locations of Lasioglossum Buccale",
+  labs(title = "Locations of Halictus confusus",
        x = "Longitude",
        y = "Latitude")
 ```
@@ -145,7 +145,16 @@ c. Add your species's points to your choice or an Oregon basemap.
 
 ```{r plot-data-points-basemap}
 library(ggspatial)
+library(ggspatial)
 
+ggplot(data = confused_spatial) +
+   geom_polygon(data = or, aes(x = lon, y = lat, group = group), 
+               fill = "lightgrey", color = "white")+  
+  geom_sf(color = "red", size = 2) +
+  theme_minimal() +
+  labs(title = "Locations of Halictus confusus",
+       x = "Longitude",
+       y = "Latitude")
 
 ```
 # Lab part 3: Cartography
