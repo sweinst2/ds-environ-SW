@@ -81,6 +81,8 @@ What is the name of your bee?
 
 Import the photos into Rmarkdown below (hint: googling bee name "discover life" or "inat" can often get you a photo. Many bees will no have any photos :( 
 
+![](/Users/sarah/OneDrive/Desktop/ds-environ-SW/confusedbee.jpg)
+
 # Lab part 2: Plotting the distrubution of your spirit bee. 
 
 How that have chosen your spirit bee, we would like to plot it's distribution. What is the crs of the data? Annoyingly it is not described anywhere in the spreadsheet (always list your crs in your data) but it is the same as what inat uses because all bees have a georeferenced plant host. If the data is in lat long, it is "unprojected" so only a datum will be listed. 
@@ -97,6 +99,21 @@ Hint 3: You may want to rename the column names you can use, colnames() and reas
 
 ```{r}
 
+confused_data <- OBA_df %>%
+  filter(OBA_df$Species == "confusus") %>%
+  select(Species, GenusSpecies, Dec..Lat., Dec..Long.,
+         Associated.plant...genus..species, MonthJul)
+
+colnames(confused_data) <- c("Species", "GenusSpecies", "Lat", "Long",
+                           "Associated Plant", "Month")
+confused_data$Month <- ifelse(confused_data$Month == "", "None Specified", confused_data$Month)
+  
+head(confused_data)
+confused_data
+
+#this is not working for some reason
+
+#confused_spatial <- st_as_sf(confused_data, coords = c("Long", "Lat"), crs = 4326)
 
 
 ```
@@ -104,7 +121,12 @@ Hint 3: You may want to rename the column names you can use, colnames() and reas
 b. Plot your exciting bee data!
 
 ```{r plot-data-points}
-
+ggplot(data = confused_spatial) +
+  geom_sf() +
+  theme_minimal() +
+  labs(title = "Locations of Lasioglossum Buccale",
+       x = "Longitude",
+       y = "Latitude")
 ```
 
 Not so exciting without some kind of background... 
@@ -114,6 +136,8 @@ Luckily we can download basemaps into R using the map_data function in ggplot (a
 ```{r plot-or}
 or <- map_data("county", "oregon") %>% 
   select(lon = long, lat, group, id = subregion)
+
+or_sp <- st_as_sf(or, coords = c("lon", "lat"), crs = 4326)
 
 ```
 
