@@ -56,8 +56,7 @@ print(unique_species)
 
 
 num_species <- length(unique_species)
-cat("Number of unique species:", num_species)
-
+print(paste(num_species))
 
 
 ```
@@ -105,7 +104,7 @@ Hint 3: You may want to rename the column names you can use, colnames() and reas
 
 confused_data <- OBA_data %>%
   filter(GenusSpecies == "confusus") %>%
-  select( Longitude = Dec..Long., Latitude = Dec..Lat., Flower = Associated.plant...genus..species, Month = Month.1)
+  select( Latitude = Dec..Lat., Longitude = Dec..Long., Flower = Associated.plant...genus..species, Month = Month.1)
 
 colnames(confused_data) <- c("Latitude", "Longitude", "Flower", "Month")
 
@@ -140,6 +139,7 @@ or <- map_data("county", "oregon") %>%
 c. Add your species's points to your choice or an Oregon basemap. 
 
 ```{r plot-data-points-basemap}
+#im confused because nothing is showing up 
 library(ggspatial)
 library(ggspatial)
 
@@ -168,7 +168,7 @@ additional attributes when you converted the dataframe to a spatial object.
 
 ggplot() +
   geom_polygon(data = or, aes(x = lon, y = lat, group = group), fill = "lightgrey", color = "black") +
-  geom_sf(data = species_sf, aes(color = Month), size = 3) +
+  geom_sf(data = confused_sf, aes(color = Month), size = 3) +
   theme_minimal() +
   labs(
     title = "Halictus confusus Distribution Across Months",
@@ -179,9 +179,9 @@ ggplot() +
   annotation_scale(location = "tl", width_hint = 0.2) +
   annotation_north_arrow(location = "tr", width = unit(.5, "in")) +
   theme(
-    legend.position = "right", # Position
-    legend.title = element_text(size = 11), # Title 
-    legend.text = element_text(size = 9) # Text 
+    legend.position = "right", 
+    legend.title = element_text(size = 11), 
+    legend.text = element_text(size = 9) 
   )
 st_write(confused_sf, "bee_species_layer.shp", append = TRUE)
 
@@ -196,13 +196,14 @@ b. Create a plot that illustrates this summary data (box plot, barplot, scatter 
 c. Create a map of your cropped spatial data.
 
 ```{r buffers}
+#I must be missing data somewhere
 buffer_500 <- st_buffer(confused_sf, dist = 500000)
 buffer_750 <- st_buffer(confused_sf, dist = 750000)
 buffer_1000 <- st_buffer(confused_sf, dist = 1000000)
 
 flowers_500 <- st_intersection(confused_sf, buffer_500)
 flowers_750 <- st_intersection(confused_sf, buffer_750)
-flowers_1000 <- st_intersection(cofused_sf, buffer_1000)
+flowers_1000 <- st_intersection(confused_sf, buffer_1000)
 
 summary_500 <- nrow(flowers_500)
 summary_750 <- nrow(flowers_750)
