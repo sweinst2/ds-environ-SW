@@ -1,8 +1,9 @@
 ---
 title: "Exploring bee-related spatial data"
-output: pdf_document
-author:
-  - Lauren Ponisio
+author: "Lauren Ponisio"
+output:
+  html_document:
+    df_print: paged
 ---
 
 <!-- Lesson Overview -->
@@ -31,13 +32,16 @@ OBA_data<- read.csv("C:/Users/sarah/OneDrive/Desktop/ds-environ-SW/6_lab_OBA_spa
 
 head(OBA_data)
 
+
+
+
 ```
 
 b. Find the columns related to genus and species and paste them together (with a space between) using the function paste(). Name the new column GenusSpecies.
 ```{r}
 #I think that i did this correct. i hope lmao 
-OBA_df <- as.data.frame(OBA_data)
-head(OBA_df)
+OBA_data$GenusSpecies <- paste(OBA_data$Genus, OBA_data$Species)
+head(OBA_data)
 ```
 
 c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alphabetical order.  How many species are there? 
@@ -45,7 +49,7 @@ c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alp
 ```{r}
 #i kinda totally forgot how this function works so that is very slay 
 
-unique_species <- sort(unique(OBA_df$GenusSpecies))
+unique_species <- sort(unique(OBA_data$GenusSpecies))
 
 
 print(unique_species)
@@ -65,7 +69,7 @@ d. So many bees, so little time. Count up the occurrences of each bee species, a
 You can use the tidyverse or any other functions in R that you like. How many "species" are there? 
 
 ```{r}
-bee_counts_atleast_2 <- OBA_df %>%
+bee_counts_atleast_2 <- OBA_data %>%
   group_by(Species) %>%
   tally() %>%
   filter(n >= 2)
@@ -99,31 +103,23 @@ Hint 3: You may want to rename the column names you can use, colnames() and reas
 
 ```{r}
 
-confused_data <- OBA_df %>%
-  filter(OBA_df$Species == "confusus") %>%
-  select(Species, GenusSpecies, Dec..Lat., Dec..Long.,
-         Associated.plant...genus..species, MonthJul)
+confused_data <- OBA_data %>%
+  filter(GenusSpecies == "confusus") %>%
+  select( Longitude = Dec..Long., Latitude = Dec..Lat., Flower = Associated.plant...genus..species, Month = Month.1)
 
-colnames(confused_data) <- c("Species", "GenusSpecies", "Lat", "Long",
-                           "Associated Plant", "Month")
-confused_data$Month <- ifelse(confused_data$Month == "", "None Specified", confused_data$Month)
-  
-head(confused_data)
-confused_data
+colnames(confused_data) <- c("Latitude", "Longitude", "Flower", "Month")
 
-#this is not working for some reason
 
-confused_sf <- st_as_sf(confused_data, coords = c("Long", "Lat"), crs = 4326)
-
+confused_sf <- st_as_sf(confused_data, coords = c("Longitude", "Latitude"), crs = 4326)
 print(confused_sf)
 ```
 
 b. Plot your exciting bee data!
 
 ```{r plot-data-points}
+#no data points for some reason
 ggplot(data = confused_sf) +
-  geom_sf() +
-  theme_minimal() +
+  geom_sf(aes(color = Flower)) +
   labs(title = "Locations of Halictus confusus",
        x = "Longitude",
        y = "Latitude")
