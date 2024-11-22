@@ -71,8 +71,6 @@ oba$Associated.plant <- str_replace_all(oba$Associated.plant, "\x92", "")
 ## To check that it worked
 sort(unique(oba$Associated.plant))[1:10]
 
-
-
 #one that says "net"
 
 oba$Associated.plant <- str_replace_all(oba$Associated.plant, "net", "")
@@ -82,6 +80,37 @@ oba$Associated.plant <- str_replace_all(oba$Associated.plant, "net", "")
 oba$Associated.plant <- str_replace_all(oba$Associated.plant, "sp.", "")
 
 sort(unique(oba$Associated.plant))[1:10]
+
+#removing common name
+
+oba$Associated.plant <- gsub("\\s*\\(.*?\\", "", oba$Associated.plant)
+
+#Removing lists
+oba$Associated.plant <- oba[!grepl(",", oba$Associated.plant),]
+
+#removing blanks
+
+oba$Associated.plant <- oba[oba$Associated.plant !="",]
+
+#plant resolution
+
+oba$Plant.resolution <- sapply(oba$Associated.plant, function(x){
+  words <- unlist(strsplit(x, " "))
+  if(length(words) == 1){
+    "Family/Genus/Common Name"
+  } else if (length(words) == 2 && grepl("//.", x)){
+    "Genus"
+  } else if (length(words) == 2){
+    "GenusSpecies"
+  } else {
+    "Missing/Complex"
+  }
+})
+
+
+
+
+
 ```
 
 # Part 2: Making a column for plant resolution
