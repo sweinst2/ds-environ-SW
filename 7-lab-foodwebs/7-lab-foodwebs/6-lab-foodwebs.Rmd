@@ -175,27 +175,81 @@ for (i in 1:23) {
 a. Convert the adjacency matrices to igraph class objects using the function 'graph_from_adjacency_matrix'. You can use a for loop or an lapply. Because these are food webs, set the argument mode to "directed" and the argument diag to FALSE (this means a species cannot consumer members of its own species, i.e., no canabalism/self-loops). Also remember that these interactions are weighted.  
 
 ```{r graphs}
-
+big_network_adj <- lapply(big_network, function(mat) {
+  graph_from_adjacency_matrix(mat, mode = "directed", weighted = TRUE, diag = FALSE)
+})
+print(big_network_adj[[1]])
 ```
 
 b. Plot three networks of your choice, using different colors for the predators and prey.
 
 ```{r plot-g1}
 ## assign groups as carnivore or herbivore
+mod <- cluster_walktrap(big_network_adj[[1]])
 
+groups <- membership(mod)
 
 ## convert to a network 3d object
+big_net3d <- igraph_to_networkD3(big_network_adj[[1]], group=groups, 
+                                       what = "both")
 
+current_mat <- as.matrix(big_network_adj[[1]])
+node_status <- apply(current_mat, 1, function(row) all(row == 0))
+
+big_net3d$nodes$color <- ifelse(node_status, "red", "blue")
 ## plot the network
-
+forceNetwork(Links = big_net3d$links,
+             Nodes = big_net3d$nodes,
+            Source = "source", Target = "target",
+            Value = "value",  NodeID = "name",
+             Group = "group",
+            colourScale = JS("d3.scaleOrdinal().domain(['blue', 'red']).range(['blue', 'red']);"),
+            opacity = 0.8, zoom=TRUE, opacityNoHover = 0.9)
 
 ```
 
 ```{r plot-g2}
+mod_1 <- cluster_walktrap(big_network_adj[[3]])
+groups_1 <- membership(mod_1)
 
+## convert to a network 3d object
+big_net3d_1 <- igraph_to_networkD3(big_network_adj[[3]], group=groups_1, 
+                                       what = "both")
+
+current_mat_1 <- as.matrix(big_network_adj[[3]])
+node_status_1 <- apply(current_mat_1, 1, function(row) all(row == 0))
+
+big_net3d_1$nodes$color <- ifelse(node_status_1, "yellow", "green")
+## plot the network
+forceNetwork(Links = big_net3d_1$links,
+             Nodes = big_net3d_1$nodes,
+            Source = "source", Target = "target",
+            Value = "value",  NodeID = "name",
+             Group = "group",
+            colourScale = JS("d3.scaleOrdinal().domain(['green', 'yellow']).range(['green', 'yellow']);"),
+            opacity = 0.8, zoom=TRUE, opacityNoHover = 0.9)
 ```
 
 ```{r plot-g3}
+mod_2 <- cluster_walktrap(big_network_adj[[4]])
 
+groups_2 <- membership(mod_2)
+
+## convert to a network 3d object
+big_net3d_2 <- igraph_to_networkD3(big_network_adj[[4]], group=groups_2, 
+                                       what = "both")
+
+current_mat_2 <- as.matrix(big_network_adj[[4]])
+node_status_2 <- apply(current_mat_2, 1, function(row) all(row == 0))
+
+big_net3d_2$nodes$color <- ifelse(node_status_2, "purple", "orange")
+## plot the network
+forceNetwork(Links = big_net3d_2$links,
+             Nodes = big_net3d_2$nodes,
+            Source = "source", Target = "target",
+            Value = "value",  NodeID = "name",
+             Group = "group",
+            colourScale = JS("d3.scaleOrdinal().domain(['orange', 'purple']).range(['orange', 'purple']);"),
+            opacity = 0.8, zoom=TRUE, opacityNoHover = 0.9)
 ```
 
