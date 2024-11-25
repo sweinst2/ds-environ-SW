@@ -82,18 +82,18 @@ oba$Associated.plant <- str_replace_all(oba$Associated.plant, "sp.", "")
 sort(unique(oba$Associated.plant))[1:10]
 
 #removing common name
-
-oba$Associated.plant <- gsub("\\s*\\(.*?\\", "", oba$Associated.plant)
+oba$Associated.plant <- gsub("\\s*\\(.*?\\)", "", oba$Associated.plant)
 
 #Removing lists
 oba$Associated.plant <- oba[!grepl(",", oba$Associated.plant),]
 
 #removing blanks
-
 oba$Associated.plant <- oba[oba$Associated.plant !="",]
 
-#plant resolution
+#7
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, "[A-Za] ++[Xx]","")
 
+#plant resolution
 oba$Plant.resolution <- sapply(oba$Associated.plant, function(x){
   words <- unlist(strsplit(x, " "))
   if(length(words) == 1){
@@ -124,6 +124,8 @@ First use regular expressions to count up the number of words in each element of
 Hint: `str_count` may be useful. 
 
 ```{r}
+
+
 
 ```
 
