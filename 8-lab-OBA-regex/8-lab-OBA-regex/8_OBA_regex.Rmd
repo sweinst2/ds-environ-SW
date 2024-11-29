@@ -138,11 +138,31 @@ Hint hint hint: `grepl` will return or TRUE or FALSE depending on whether it fin
 
 ```{r}
 
+oba$plantResolution <- NA
+
+
+for (i in 1:nrow(oba)) {
+  if (grepl("aceae$", oba$Associated.plant[i], ignore.case = TRUE)) {
+    oba$plantResolution[i] <- "Family"
+  } else if (oba$plantTaxaWordCount[i] == 1) {
+    oba$plantResolution[i] <- "Genus"
+  } else if (oba$plantTaxaWordCount[i] >= 2 && !grepl("sp\\.$", oba$Associated.plant[i], ignore.case = TRUE)) {
+    oba$plantResolution[i] <- "Species"
+  } else {
+    oba$plantResolution[i] <- "Missing/Complex"
+  }
+}
+
+table(oba$plantResolution)
+
+
 ```
 
 c. For those that are identified to genus but are lacking an sp., add that now so that they will not be treated as separate plant species (i.e., Rosa vs Rosa sp.). You can do this with a regular expression and using 'gsub' or 'string_replace_all' or by counting up the number of words in Associated.plant. 
 ```{r}
+oba$Associated.plant <- gsub("^([A-Za-z]+)$", "\\1 sp.", oba$Associated.plant)
 
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, "^([A-Za-z]+)$", "\\1 sp.")
 
 
 ## To check that it worked
