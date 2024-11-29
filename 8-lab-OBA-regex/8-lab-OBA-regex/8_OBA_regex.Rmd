@@ -1,6 +1,6 @@
 ---
 title: "Using regular expressions"
-output: github_document
+output: pdf_document
 author:
   - Lauren Ponisio
 ---
@@ -84,11 +84,11 @@ sort(unique(oba$Associated.plant))[1:10]
 #removing common name
 oba$Associated.plant <- gsub("\\s*\\(.*?\\)", "", oba$Associated.plant)
 
-#Removing lists
-oba$Associated.plant <- oba[!grepl(",", oba$Associated.plant),]
+#Removing lists were working earlier
+#oba$Associated.plant <- oba[!grepl(",", oba$Associated.plant),]
 
-#removing blanks
-oba$Associated.plant <- oba[oba$Associated.plant !="",]
+#removing blanks these were working earlier 
+#oba$Associated.plant <- oba[oba$Associated.plant !="",]
 
 #7
 oba$Associated.plant <- str_replace_all(oba$Associated.plant, "[A-Za] ++[Xx]","")
@@ -171,6 +171,18 @@ unique(oba$Associated.plant[oba$plantResolution == "genus"])
 
 d. Create a new column called plantGenus that is the genus if the associated taxa was resolved to species or genus, and NA if it was resolved to family. 
 ```{r}
+oba$plantGenus <- NA
+
+for (i in 1:nrow(oba)) {
+ 
+  words <- unlist(strsplit(oba$Associated.plant[i]," "))
+  if (oba$plantResolution[i] == "Species" || oba$plantResolution[i] == "Genus") {
+    oba$plantGenus[i] <- words[1]
+  }
+  else if (oba$plantResolution[i] == "Family" || oba$plantResolution[i] == "Missing/Complex") {
+    oba$plantGenus[i] <- NA
+  }
+}
 
 ## To check finish with
 table(oba$plantGenus)
